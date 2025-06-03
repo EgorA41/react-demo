@@ -1,5 +1,4 @@
 import { Layout } from 'antd';
-import { calc } from 'antd/es/theme/internal';
 
 const contentStyle = {
   textAlign: 'center',

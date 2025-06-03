@@ -1,13 +1,15 @@
 import { Layout } from 'antd';
 
 const headerStyle = {
-
-textAlign: 'center',
-  color: '#fff',
+  display: 'flex',
+  justifyContent: 'space-between',
+  textAlign: 'center',
+  width: '100%',
+  padding: '1rem',
   height: 60,
   paddingInline: 48,
   lineHeight: '64px',
-  backgroundColor: '#4096ff',
+  backgroundColor: 'white',
 };
 
 export default function AppHeader () {

@@ -1,9 +1,8 @@
-import { Layout, Card, Statistic, List, Typography,Spin } from 'antd';
+import { Layout, Card, Statistic, List, Typography, Tag } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import { fetchAssets, fetchData } from '../api';
-import { percentDifference } from '../util';
-
+import { capitalizeFirstLetter } from '../util';
+import { useContext } from 'react';
+import CryptoContext from '../../context/context'
 
 const siderStyle = {
   textAlign: 'left',
@@ -14,41 +13,7 @@ const siderStyle = {
 
 export default function AppSider () {
 
-	const [loading, setLoading] = useState(false)
-	const [data, setData] = useState([])
-	const [assets, setAssets] = useState([])
-
-	useEffect(()=>{
-		async function preload () {
-				setLoading(true)
-
-				const {result} = await fetchData()
-				const assets = await fetchAssets()
-
-				setAssets(assets.map(asset => {
-					const coin = result.find((c) => c.id === asset.id)
-					 if (!coin) return asset;
-					return {
-						grow: asset.price < coin.price,
-						growInPercent: percentDifference(asset.price, coin.price),
-						totalAmount: asset.amount * coin.price,
-						totalProfit: asset.amount * coin.price - asset.amount * asset.price,
-						... asset
-
-					}
-
-
-				}))
-
-				setData(result)
-				setLoading(false)
-		}
-		preload()
-	}, [])
-
-	if(loading) {
-		return <Spin fullscreen/>
-	}
+const { assets } = useContext(CryptoContext)
 
 
 return (
@@ -58,7 +23,7 @@ return (
 	<Card key={asset.id}
 		style={{ marginBottom: '1rem' }}>
 		<Statistic
-		  title= {asset.id}
+		  title= {capitalizeFirstLetter(asset.id)}
           value={asset.totalAmount}
           precision={2}
           valueStyle={{ color: asset.grow ? '#3f8600' : '#cf1322' }}
@@ -67,14 +32,17 @@ return (
 		/>
 		<List
   	dataSource={[
-		{title: 'Total Profit', value: asset.totalProfit},
-		{title: 'Asset Amount', value: asset.amount},
-		{title: 'Difference', value: asset.growInPercent},
+		{title: 'Total Profit', value: asset.totalProfit, withTag: true},
+		{title: 'Asset Amount', value: asset.amount, isPlain: true},
 	]}
   	renderItem={(item) => (
     <List.Item>
 		<span>{item.title}</span>
-		<span>{item.value}</span>
+		<span>
+			{item.withTag && (<Tag color={asset.grow? 'green': 'red'}>{asset.growInPercent}%</Tag>)}
+			{item.isPlain && item.value}
+			{!item.isPlain && (<Typography.Text type={asset.grow? 'success':'danger'} >{item.value.toFixed(2)}$</Typography.Text>)}
+		</span>
     </List.Item>
   )}
 />
