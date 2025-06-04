@@ -1,4 +1,6 @@
-import { Layout } from 'antd';
+import { Layout, Select, Space, Button, Modal } from 'antd';
+import { useCrypto } from '../../context/context';
+import { useState, useEffect } from 'react';
 
 const headerStyle = {
   display: 'flex',
@@ -7,11 +9,65 @@ const headerStyle = {
   width: '100%',
   padding: '1rem',
   height: 60,
-  paddingInline: 48,
   lineHeight: '64px',
   backgroundColor: 'white',
 };
 
+
 export default function AppHeader () {
-return ( <Layout.Header style={headerStyle}>Header</Layout.Header>)
+
+const [selectOpen, setSelectOpen] = useState(false);
+ const [isModalOpen, setIsModalOpen] = useState(false);
+
+const handleSelect = function (value) {
+console.log('Выбрано:', value);
+    setSelectOpen(false);
+	setIsModalOpen(true)
+}
+
+useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === '/') {
+        setSelectOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+const {crypto} = useCrypto()
+return (
+<Layout.Header style={headerStyle}>
+	<Select
+	open={selectOpen}
+    onOpenChange={setSelectOpen}
+    onSelect={handleSelect}
+	style={{ width: '250px' }}
+	placeholder="press / to open"
+	options={crypto.map((coin) => ({
+		label: coin.name,
+		value: coin.id,
+		icon: coin.icon,
+	}))}
+	optionRender={option => (
+	<Space>
+		<img style={{width: '20px'}}
+		src={option.data.icon}
+		alt = {option.data.label} />
+		{option.data.label}
+	</Space>
+	)}
+	/>
+  <Button type="primary">Add Asset</Button>
+   <Modal
+        open={isModalOpen}
+		onCancel={()=>setIsModalOpen(false)}
+        footer = {null}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+  </Layout.Header>)
 }
