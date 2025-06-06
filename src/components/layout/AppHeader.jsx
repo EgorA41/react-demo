@@ -1,6 +1,8 @@
-import { Layout, Select, Space, Button, Modal } from 'antd';
+import { Layout, Select, Space, Button, Modal, Drawer } from 'antd';
 import { useCrypto } from '../../context/context';
 import { useState, useEffect } from 'react';
+import CoinModal from '../CoinModal';
+import AssetForm from '../AddAssetForm';
 
 const headerStyle = {
   display: 'flex',
@@ -17,12 +19,15 @@ const headerStyle = {
 export default function AppHeader () {
 
 const [selectOpen, setSelectOpen] = useState(false);
- const [isModalOpen, setIsModalOpen] = useState(false);
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [coin, setCoin] = useState(null);
+const [drawer, setDrawer] = useState(true);
 
 const handleSelect = function (value) {
 console.log('Выбрано:', value);
     setSelectOpen(false);
 	setIsModalOpen(true)
+	setCoin(crypto.find((c)=> c.id === value))
 }
 
 useEffect(() => {
@@ -59,15 +64,17 @@ return (
 	</Space>
 	)}
 	/>
-  <Button type="primary">Add Asset</Button>
-   <Modal
+    <Button type="primary" onClick={() => setDrawer(true)}>Add Asset</Button>
+   	<Modal
         open={isModalOpen}
 		onCancel={()=>setIsModalOpen(false)}
-        footer = {null}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
+        footer = {null}>
+        <CoinModal coin = { coin }/>
+    </Modal>
+	<Drawer
+        onClose={() => setDrawer(false)}
+        open={drawer}>
+        <AssetForm />
+    </Drawer>
   </Layout.Header>)
 }
