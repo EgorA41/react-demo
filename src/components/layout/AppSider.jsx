@@ -17,7 +17,6 @@ const { assets } = useContext(CryptoContext)
 
 
 return (
-
 	<Layout.Sider width= "25%" style={siderStyle}>
 	{assets.map((asset) => (
 	<Card key={asset.id}

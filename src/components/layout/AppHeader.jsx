@@ -49,7 +49,7 @@ return (
     onOpenChange={setSelectOpen}
     onSelect={handleSelect}
 	style={{ width: '250px' }}
-	placeholder="press / to open"
+	value="press / to open"
 	options={crypto.map((coin) => ({
 		label: coin.name,
 		value: coin.id,
@@ -72,9 +72,11 @@ return (
         <CoinModal coin = { coin }/>
     </Modal>
 	<Drawer
+		width={600}
+		destroyOnHidden
         onClose={() => setDrawer(false)}
         open={drawer}>
-        <AssetForm />
+        <AssetForm onClose={()=> setDrawer(false)}/>
     </Drawer>
   </Layout.Header>)
 }

@@ -1,5 +1,3 @@
-
-
 import { Layout, Spin } from 'antd';
 
 import AppHeader from './AppHeader';
@@ -16,11 +14,11 @@ const { loading } = useContext(CryptoContext)
 	}
 
 return(
-		<Layout >
-			<AppHeader/>
-				<Layout>
-					<AppSider/>
-					<AppContent/>
-				</Layout>
+	<Layout >
+		<AppHeader/>
+		<Layout>
+			<AppSider/>
+			<AppContent/>
 		</Layout>
+	</Layout>
 )}
