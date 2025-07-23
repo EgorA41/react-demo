@@ -5,7 +5,7 @@ export default function CoinInfo ({coin, withSymbol}) {
 	<Flex align="center">
 		<img src={coin.icon} alt = {coin.name} style={{width: 40}}/>
 		<Typography.Title level={2} style={{margin: 0, marginLeft: 20}}>
-			{withSymbol && coin.Symbol} {coin.name}
+			{withSymbol && <span>({coin.symbol})</span>} {coin.name}
 		</Typography.Title>
 	</Flex>)
 

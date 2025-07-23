@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useCrypto } from "../context/context"
 import {
 	Select,
@@ -25,15 +25,16 @@ const validateMessages = {
 export default function AssetForm ({onClose}) {
 	const [form] = Form.useForm()
 	const [coin, setCoin] = useState(null)
-	const { crypto } = useCrypto()
+	const { crypto, addAsset } = useCrypto()
 	const [submitted, setSubmitted] = useState(false)
+	const assetRef = useRef()
 
 	if (submitted) {
 		return (
 		<Result
 			status="success"
 			title="Successfully Added"
-			subTitle={`Added ${42} of ${coin.name} by price ${24}`}
+			subTitle={`Added ${assetRef.current.amount} of ${coin.name} by price ${assetRef.current.price}`}
 			extra={[
 			<Button type="primary" key="close" onClick={onClose}>
 				Close
@@ -64,8 +65,16 @@ export default function AssetForm ({onClose}) {
 		/>
 	)}
 function onFinish (values) {
-	console.log('finish', values)
+	console.log(values)
+	const newAsset = {
+		id: coin.id,
+		amount: values.amount,
+		price: values.price,
+		date: values.date ? values.date.toDate() : new Date()
+	}
+	assetRef.current = newAsset
 	setSubmitted(true)
+	addAsset(newAsset)
 }
 
 function handleAmountChange (value) {

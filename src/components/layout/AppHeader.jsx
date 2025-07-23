@@ -21,7 +21,7 @@ export default function AppHeader () {
 const [selectOpen, setSelectOpen] = useState(false);
 const [isModalOpen, setIsModalOpen] = useState(false);
 const [coin, setCoin] = useState(null);
-const [drawer, setDrawer] = useState(true);
+const [drawer, setDrawer] = useState(false);
 
 const handleSelect = function (value) {
 console.log('Выбрано:', value);
